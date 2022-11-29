@@ -12,12 +12,14 @@ THIS_DIR = os.path.dirname(__file__)
 
 def solve(s: str) -> int:
     numbers = helpers.parse_numbers_split(s)
-    solution = 0
-
     for n in numbers:
-        ...
+        pass
 
-    return solution
+    lines = s.splitlines()
+    for line in lines:
+        pass
+    # TODO: implement solution here!
+    return 0
 
 
 def main() -> int:
