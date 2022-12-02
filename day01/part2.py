@@ -5,6 +5,7 @@ import os.path
 
 import pytest
 
+import helpers
 
 THIS_DIR = os.path.dirname(__file__)
 
@@ -61,7 +62,7 @@ EXPECTED = 45000
     ("s", "expected"),
     (
         (INPUT_S, EXPECTED),
-        # (helpers.read_file(os.path.join(THIS_DIR, "input.txt")), solution),
+        (helpers.read_file(os.path.join(THIS_DIR, "input.txt")), 206104),
     ),
 )
 def test(s: str, expected: int) -> None:
