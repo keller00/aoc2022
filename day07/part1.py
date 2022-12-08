@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import argparse
 import os.path
-from collections import deque
+from typing import Any
 
 import pytest
 
@@ -10,20 +10,22 @@ import helpers
 
 THIS_DIR = os.path.dirname(__file__)
 
+Disk = dict[str, int | 'Disk']
+
 
 def solve(s: str) -> int:
     answer = 0
-    disk = {}
+    disk: Disk = {}
     lines = s.splitlines()
     cwd: list[str] = []
     for line in lines:
         if line.startswith("$"):
             # process command
-            l = line.lstrip("$ ")
-            if " " in l:
-                cmd, rest = l.split(" ", 1)
+            ln = line.lstrip("$ ")
+            if " " in ln:
+                cmd, rest = ln.split(" ", 1)
             else:
-                cmd = l
+                cmd = ln
             if cmd == "cd":
                 if rest == "..":
                     cwd = cwd[:-1]
@@ -33,17 +35,17 @@ def solve(s: str) -> int:
                     cwd.append(rest)
         else:
             this = disk
-            if len(cwd) > 0:
-                this = disk[cwd[0]]
-            for p in cwd[1:]:
-                this = this[p]
+            for p in cwd:
+                this = this[p]  # type: ignore
+            if isinstance(this, int):
+                raise Exception("ended up in a file?")
             size, name = line.split()
             if size == "dir":
                 this[name] = {}
             else:
                 this[name] = int(size)
 
-    def calculate_folder_size(e) -> int:
+    def calculate_folder_size(e: int | dict[str, int | dict[str, Any]]) -> int:
         nonlocal answer
         if isinstance(e, int):
             return e
