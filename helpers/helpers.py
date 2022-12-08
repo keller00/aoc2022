@@ -170,12 +170,12 @@ def adjacent_8(x: int, y: int) -> Generator[tuple[int, int], None, None]:
             yield x + x_d, y + y_d
 
 
-def parse_coords_int(s: str) -> dict[tuple[int, int], int]:
+def parse_coords_int(s: str) -> tuple[dict[tuple[int, int], int], int, int]:
     coords = {}
     for y, line in enumerate(s.splitlines()):
         for x, c in enumerate(line):
             coords[(x, y)] = int(c)
-    return coords
+    return coords, x + 1, y + 1
 
 
 def parse_coords_hash(s: str) -> set[tuple[int, int]]:
