@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import argparse
 import os.path
-from typing import NamedTuple
 
 import pytest
 
@@ -11,15 +10,10 @@ import helpers
 THIS_DIR = os.path.dirname(__file__)
 
 
-class pos2d(NamedTuple):
-    x: int
-    y: int
-
-
 def move_tail(
-    h_pos: pos2d,
-    t_pos: pos2d,
-) -> pos2d:
+    h_pos: helpers.pos2d,
+    t_pos: helpers.pos2d,
+) -> helpers.pos2d:
     if h_pos.x == t_pos.x and h_pos.y == t_pos.y:
         return t_pos
     if h_pos.x == t_pos.x:
@@ -39,7 +33,7 @@ def move_tail(
         x_diff = h_pos.x - t_pos.x
         y_diff = h_pos.y - t_pos.y
         if abs(x_diff) + abs(y_diff) == 3:
-            return pos2d(
+            return helpers.pos2d(
                 t_pos.x + int(x_diff / abs(x_diff)),
                 t_pos.y + int(y_diff / abs(y_diff)),
             )
@@ -48,9 +42,9 @@ def move_tail(
 
 def solve(s: str) -> int:
     lines = s.splitlines()
-    h_pos: pos2d = pos2d(0, 0)
-    t_pos: pos2d = pos2d(0, 0)
-    visited: set[pos2d] = {t_pos}
+    h_pos: helpers.pos2d = helpers.pos2d(0, 0)
+    t_pos: helpers.pos2d = helpers.pos2d(0, 0)
+    visited: set[helpers.pos2d] = {t_pos}
     for line in lines:
         motion, times = line.split()
         for _ in range(int(times)):

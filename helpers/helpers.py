@@ -11,6 +11,7 @@ import urllib.error
 import urllib.parse
 import urllib.request
 from typing import Generator
+from typing import NamedTuple
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 
@@ -243,3 +244,8 @@ class Direction4(enum.Enum):
 
     def apply(self, x: int, y: int, *, n: int = 1) -> tuple[int, int]:
         return self.x * n + x, self.y * n + y
+
+
+class pos2d(NamedTuple):
+    x: int
+    y: int
