@@ -13,15 +13,15 @@ THIS_DIR = os.path.dirname(__file__)
 def solve(s: str) -> str:
     board_s, _, movements = s.partition("\n\n")
     board_lines = board_s.splitlines()
-    board: list[list[str]] = []
-    for _ in board_lines.pop().split():
-        board.append(list())
+    board: list[list[str]] = [list() for _ in board_lines.pop().split()]
 
     for line in reversed(board_lines):
         for i in range(len(board)):
-            ch = line[i * 4 + 1]
-            if ch != " ":
-                board[i].append(ch)
+            loc = i * 4 + 1
+            if loc < len(line):
+                ch = line[loc]
+                if ch != " ":
+                    board[i].append(ch)
     for m in movements.splitlines():
         _, amount, _, from_, _, to = m.split()
         board[int(to) - 1].extend(board[int(from_) - 1][-int(amount):])
@@ -60,7 +60,7 @@ EXPECTED = "MCD"
     ("s", "expected"),
     (
         (INPUT_S, EXPECTED),
-        (helpers.read_file(os.path.join(THIS_DIR, "input.txt")), "JRVNHHCSJ"),
+        (helpers.read_file(os.path.join(THIS_DIR, "input.txt")), "GNFBSBJLH"),
     ),
 )
 def test(s: str, expected: int) -> None:

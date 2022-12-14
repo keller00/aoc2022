@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import os.path
 from typing import Any
+from typing import Union
 
 import pytest
 
@@ -10,7 +11,7 @@ import helpers
 
 THIS_DIR = os.path.dirname(__file__)
 
-Disk = dict[str, int | 'Disk']
+Disk = dict[str, Union[int, "Disk"]]
 
 
 def solve(s: str) -> int:
