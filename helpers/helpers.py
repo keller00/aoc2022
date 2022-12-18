@@ -252,6 +252,21 @@ class pos2d(NamedTuple):
     y: int
 
 
+class pos3d(NamedTuple):
+    x: int
+    y: int
+    z: int
+
+
+def adjacent_6(p: pos3d) -> Generator[pos3d, None, None]:
+    yield p._replace(x=p.x-1)
+    yield p._replace(x=p.x+1)
+    yield p._replace(y=p.y-1)
+    yield p._replace(y=p.y+1)
+    yield p._replace(z=p.z-1)
+    yield p._replace(z=p.z+1)
+
+
 def merge_ranges(ranges: list[tuple[int, int]]) -> list[tuple[int, int]]:
     ranges.sort(key=itemgetter(0))
     merged_ranges: list[tuple[int, int]] = list()
