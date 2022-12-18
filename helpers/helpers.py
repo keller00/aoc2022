@@ -10,6 +10,7 @@ import time
 import urllib.error
 import urllib.parse
 import urllib.request
+from operator import itemgetter
 from typing import Generator
 from typing import NamedTuple
 
@@ -249,3 +250,20 @@ class Direction4(enum.Enum):
 class pos2d(NamedTuple):
     x: int
     y: int
+
+
+def merge_ranges(ranges: list[tuple[int, int]]) -> list[tuple[int, int]]:
+    ranges.sort(key=itemgetter(0))
+    merged_ranges: list[tuple[int, int]] = list()
+    for i in range(len(ranges) - 1):
+        lhs = ranges[i]
+        rhs = ranges[i + 1]
+        if rhs[0] <= lhs[1] <= rhs[1] or rhs[0] == lhs[1] + 1:
+            ranges[i + 1] = (lhs[0], rhs[1])
+        elif lhs[0] <= rhs[0] and lhs[1] >= rhs[1]:
+            ranges[i + 1] = lhs
+            continue
+        else:
+            merged_ranges.append(lhs)
+    merged_ranges.append(ranges[-1])
+    return merged_ranges
