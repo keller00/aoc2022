@@ -180,13 +180,17 @@ def parse_coords_int(s: str) -> tuple[dict[tuple[int, int], int], int, int]:
     return coords, x + 1, y + 1
 
 
-def parse_coords_hash(s: str) -> set[tuple[int, int]]:
+def parse_coords_symbol(s: str, sep: str) -> set[pos2d]:
     coords = set()
     for y, line in enumerate(s.splitlines()):
         for x, c in enumerate(line):
-            if c == '#':
-                coords.add((x, y))
+            if c == sep:
+                coords.add(pos2d(x=x, y=y))
     return coords
+
+
+def parse_coords_hash(s: str) -> set[pos2d]:
+    return parse_coords_symbol(s, "#")
 
 
 def parse_numbers_split(s: str, *, sep: str | None = None) -> list[int]:
