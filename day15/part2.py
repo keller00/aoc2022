@@ -10,7 +10,8 @@ import helpers
 
 THIS_DIR = os.path.dirname(__file__)
 INPUT_RE = re.compile(
-    r"Sensor at x=(-?\d+), y=(-?\d+): closest beacon is at x=(-?\d+), y=(-?\d+)",
+    r"Sensor at x=(-?\d+), y=(-?\d+): closest "
+    r"beacon is at x=(-?\d+), y=(-?\d+)",
 )
 
 
@@ -41,6 +42,7 @@ def solve_for_row(rs: set[Rhombus], col: int) -> int | None:
             m_r = helpers.merge_ranges(ranges)
             if len(m_r) > 1:
                 return tuning_frequency(helpers.pos2d(m_r[0][1] + 1, col))
+    return None
 
 
 def solve(s: str, n: int) -> int:
@@ -57,6 +59,7 @@ def solve(s: str, n: int) -> int:
         a = solve_for_row(rhombuses, i)
         if a is not None:
             return a
+    raise Exception("we didn't find a solution?")
 
 
 def main() -> int:
@@ -66,7 +69,7 @@ def main() -> int:
     args = parser.parse_args()
 
     with open(args.data_file) as f:
-        print(solve(f.read()))
+        print(solve(f.read(), 4000001))
 
     return 0
 

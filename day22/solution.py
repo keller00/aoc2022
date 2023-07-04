@@ -13,7 +13,7 @@ import helpers
 THIS_DIR = os.path.dirname(__file__)
 STEPS_RE = re.compile(r"(\d+)([LR])")
 SINGLE_MOVE_END_RE = re.compile(r"(\d+)$")
-previous_posns: list[tuple, facing] = list()
+previous_posns: list[tuple[helpers.pos2d, facing]] = list()
 
 
 class facing(enum.Enum):
@@ -114,7 +114,7 @@ def solve(s: str) -> int:
     board_s, path = s.split("\n\n")
     open_tiles = helpers.parse_coords_symbol(board_s, '.')
     walls = helpers.parse_coords_hash(board_s)
-    lines = s.splitlines()
+    # lines = s.splitlines()
 
     pos = sorted(t for t in open_tiles if t.y == 0)[0]
     face = facing.right
@@ -141,7 +141,12 @@ def solve(s: str) -> int:
         elif face_b == facing.up:
             icon = '^'
         board_to_print[pos_b.y] = ''.join(
-            [board_to_print[pos_b.y][:pos_b.x], icon, board_to_print[pos_b.y][pos_b.x + 1:]])
+            [
+                board_to_print[pos_b.y][:pos_b.x],
+                icon,
+                board_to_print[pos_b.y][pos_b.x + 1:],
+            ],
+        )
     for line in board_to_print:
         print(line)
     return (pos.y + 1) * 1000 + (pos.x + 1) * 4 + face.value
@@ -175,7 +180,7 @@ INPUT_S = '''\
 
 10R5L5R10L4R5L5
 '''
-EXPECTED = 5031
+EXPECTED = 6032
 
 
 @pytest.mark.parametrize(

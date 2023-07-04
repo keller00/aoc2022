@@ -3,13 +3,8 @@ from __future__ import annotations
 import argparse
 import os.path
 import re
-from collections import deque
-from copy import deepcopy
-from typing import Generator
 
 import pytest
-
-import helpers
 
 THIS_DIR = os.path.dirname(__file__)
 BLUEPRINT_NAME_RE = re.compile(r"Blueprint (\d+):")
@@ -18,7 +13,7 @@ BLUEPRINT_DOUBLE_RE = re.compile(
     r"  Each (\w+) robot costs (\d+) (\w+) and (\d+) (\w+).")
 
 
-def create_dependency_graph(blueprint: dict[str, int]) -> list[str]:
+def create_dependency_graph(blueprint: dict[str, dict[str, int]]) -> list[str]:
     l: list[str] = ["geode"]
 
     def _recursive_fn(name: str) -> None:
@@ -31,7 +26,7 @@ def create_dependency_graph(blueprint: dict[str, int]) -> list[str]:
     return l
 
 
-def get_enoughs(blueprint: dict[str, int]) -> dict[str, int]:
+def get_enoughs(blueprint: dict[str, dict[str, int]]) -> dict[str, int]:
     enoughs = {r: 0 for r in ["geode", "obsidian", "clay", "ore"]}
 
     for u in blueprint.values():
@@ -41,7 +36,11 @@ def get_enoughs(blueprint: dict[str, int]) -> dict[str, int]:
     return enoughs
 
 
-def quality_level(blueprint: dict[str, int], id: int, robots: dict[str, int]) -> int:
+def quality_level(
+        blueprint: dict[str, dict[str, int]],
+        id: int,
+        robots: dict[str, int],
+) -> int:
     resources = {e: 0 for e in ("ore", "clay", "geode", "obsidian")}
     robot_build_order = create_dependency_graph(blueprint)
     enough = get_enoughs(blueprint)
@@ -65,9 +64,9 @@ def quality_level(blueprint: dict[str, int], id: int, robots: dict[str, int]) ->
 
 def solve(s: str) -> int:
     overall_quality = 0
-    blueprints: list[dict[str, int]] = []
+    blueprints: list[dict[str, dict[str, int]]] = list()
     for b in map(lambda e: e.splitlines(), s.split("\n\n")):
-        b_name = int(BLUEPRINT_NAME_RE.fullmatch(b[0]).group(1))
+        # b_name = int(BLUEPRINT_NAME_RE.fullmatch(b[0]).group(1))
         this_b = dict()
         for line in b[1:]:
             single = BLUEPRINT_SINGLE_RE.fullmatch(line)
@@ -82,9 +81,12 @@ def solve(s: str) -> int:
                     double.group(5): int(double.group(4)),
                 }
         blueprints.append(this_b)
-    for i, b in enumerate(blueprints):
-        overall_quality += quality_level(b, i + 1,
-                                         {"ore": 1, "clay": 0, "obsidian": 0, "geode": 0})
+    for i, bp in enumerate(blueprints):
+        overall_quality += quality_level(
+            bp,
+            i + 1,
+            {"ore": 1, "clay": 0, "obsidian": 0, "geode": 0},
+        )
     return overall_quality
 
 

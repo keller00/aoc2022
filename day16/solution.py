@@ -3,12 +3,10 @@ from __future__ import annotations
 import argparse
 import os.path
 import re
-from functools import lru_cache
 from typing import NamedTuple
 
 import pytest
 
-import helpers
 
 THIS_DIR = os.path.dirname(__file__)
 INPUT_RE = re.compile(
@@ -71,7 +69,7 @@ def solve(s: str) -> int:
     #     for i, n in enumerate(ne):
     #         if isinstance(valves[k].leads_to[i], str):
     #             valves[k].leads_to[i] = valves[n]
-    return release_most_pressure(tuple(), "AA", 0, 30)
+    return release_most_pressure(tuple(), "AA", 0)
 
 
 def main() -> int:
